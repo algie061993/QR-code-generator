@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Studio - Advanced Generator</title>
+    <!-- Compiled Tailwind CSS -->
+    <link rel="stylesheet" href="./CSS/tailwind.generated.css">
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- QRCode.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha384-3zSEDfvllQohrq0PHL1fOXJuC/jSOO34H46t6UQfobFOmxE5BpjjaIJY5F2/bMnU" crossorigin="anonymous"></script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./CSS/styles.css">
+</head>
+<body class="bg-gradient-mesh text-slate-800 dark:text-slate-100 min-h-full font-sans transition-colors duration-300 flex flex-col">
+
+    <header class="w-full glass-panel sticky top-0 z-40 border-b border-slate-200/50 dark:border-slate-800/50 px-4 lg:px-8 py-3">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
+                    <i class="fa-solid fa-qrcode text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">QR Studio Pro</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Custom QR Code Generator By Algie Marciada</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <!-- Theme Toggle Button -->
+                <button id="themeToggle" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:block text-amber-400"></i>
+                </button>
+                <!-- Quick Action Button -->
+                <button id="btnSaveHistory" class="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-all shadow-md shadow-blue-500/20 active:scale-95">
+                    <i class="fa-solid fa-bookmark"></i>
+                    <span class="hidden sm:inline">Save QR</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+        
+        <section class="lg:col-span-7 xl:col-span-8 flex flex-col space-y-6">
+            
+            <!-- Type Tabs Navigation -->
+            <div class="glass-panel rounded-2xl p-2 shadow-sm flex overflow-x-auto space-x-1 no-scrollbar">
+                <button data-tab="url" class="tab-btn flex-1 min-w-[80px] py-2.5 px-3 rounded-xl font-medium text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-center space-y-1 sm:space-y-0 sm:space-x-2 transition-all bg-blue-600 text-white shadow-sm">
+                    <i class="fa-solid fa-link text-sm"></i>
+                    <span>URL/Text</span>
+                </button>
+                <button data-tab="wifi" class="tab-btn flex-1 min-w-[80px] py-2.5 px-3 rounded-xl font-medium text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-center space-y-1 sm:space-y-0 sm:space-x-2 transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="fa-solid fa-wifi text-sm"></i>
+                    <span>Wi-Fi</span>
+                </button>
+                <button data-tab="vcard" class="tab-btn flex-1 min-w-[80px] py-2.5 px-3 rounded-xl font-medium text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-center space-y-1 sm:space-y-0 sm:space-x-2 transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="fa-solid fa-address-card text-sm"></i>
+                    <span>Contact</span>
+                </button>
+                <button data-tab="email" class="tab-btn flex-1 min-w-[80px] py-2.5 px-3 rounded-xl font-medium text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-center space-y-1 sm:space-y-0 sm:space-x-2 transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="fa-solid fa-envelope text-sm"></i>
+                    <span>Email</span>
+                </button>
+                <button data-tab="sms" class="tab-btn flex-1 min-w-[80px] py-2.5 px-3 rounded-xl font-medium text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-center space-y-1 sm:space-y-0 sm:space-x-2 transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="fa-solid fa-comment-sms text-sm"></i>
+                    <span>SMS</span>
+                </button>
+                <button data-tab="location" class="tab-btn flex-1 min-w-[80px] py-2.5 px-3 rounded-xl font-medium text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-center space-y-1 sm:space-y-0 sm:space-x-2 transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="fa-solid fa-location-dot text-sm"></i>
+                    <span>Location</span>
+                </button>
+            </div>
+
+            <div class="glass-panel rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200/60 dark:border-slate-800/60">
+                
+                <!-- URL / Plain Text Panel -->
+                <div id="panel-url" class="tab-panel space-y-4">
+                    <div class="flex justify-between items-center">
+                        <label class="block text-sm font-semibold text-slate-700 dark:text-slate-200">Website URL or Text Content</label>
+                        <span class="text-xs text-slate-400">Dynamic Text Input</span>
+                    </div>
+                    <textarea id="input-url" rows="4" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all resize-none" placeholder="https://example.com or enter any plain text..."></textarea>
+                </div>
+
+                <!-- Wi-Fi Panel -->
+                <div id="panel-wifi" class="tab-panel hidden space-y-4">
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">Wi-Fi Connection Details</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Network Name (SSID)</label>
+                            <input type="text" id="wifi-ssid" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Home WiFi">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Encryption Type</label>
+                            <select id="wifi-type" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                <option value="WPA">WPA / WPA2 / WPA3</option>
+                                <option value="WEP">WEP</option>
+                                <option value="nopass">None (Open Network)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="wifi-pass-container">
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Wi-Fi Password</label>
+                        <input type="password" id="wifi-password" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="SecretPassword123">
+                    </div>
+                    <div class="flex items-center space-x-2 pt-1">
+                        <input type="checkbox" id="wifi-hidden" class="rounded text-blue-600 focus:ring-blue-500 h-4 w-4">
+                        <label for="wifi-hidden" class="text-xs text-slate-600 dark:text-slate-300">Hidden Network SSID</label>
+                    </div>
+                </div>
+
+                <!-- vCard Contact Panel -->
+                <div id="panel-vcard" class="tab-panel hidden space-y-4">
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">vCard Contact Info</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">First Name</label>
+                            <input type="text" id="vcard-fname" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Jane">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Last Name</label>
+                            <input type="text" id="vcard-lname" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Doe">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Phone Number</label>
+                            <input type="tel" id="vcard-phone" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="+1 234 567 8900">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Email Address</label>
+                            <input type="email" id="vcard-email" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="jane.doe@company.com">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Organization / Company</label>
+                            <input type="text" id="vcard-org" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Acme Inc.">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Website</label>
+                            <input type="url" id="vcard-url" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="https://company.com">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email Panel -->
+                <div id="panel-email" class="tab-panel hidden space-y-4">
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">Email Format</h3>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Recipient (To)</label>
+                        <input type="email" id="email-to" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="hello@example.com">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Subject</label>
+                        <input type="text" id="email-subject" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="Inquiry about services">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Body Content</label>
+                        <textarea id="email-body" rows="3" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none" placeholder="Hello, I would like to get more information..."></textarea>
+                    </div>
+                </div>
+
+                <!-- SMS Panel -->
+                <div id="panel-sms" class="tab-panel hidden space-y-4">
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">SMS Message Format</h3>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Phone Number</label>
+                        <input type="tel" id="sms-phone" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="+11234567890">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Message Text</label>
+                        <textarea id="sms-message" rows="3" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none" placeholder="Text message content..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Location Panel -->
+                <div id="panel-location" class="tab-panel hidden space-y-4">
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">Location Coordinates</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Latitude</label>
+                            <input type="number" step="any" id="loc-lat" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="37.7749">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Longitude</label>
+                            <input type="number" step="any" id="loc-lng" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="-122.4194">
+                        </div>
+                    </div>
+                    <button id="btnGetCurrentLocation" class="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline flex items-center space-x-1">
+                        <i class="fa-solid fa-crosshairs"></i>
+                        <span>Use My Current Location</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200/60 dark:border-slate-800/60 space-y-6">
+                <h3 class="text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                    <i class="fa-solid fa-sliders text-blue-500"></i>
+                    <span>Customization Options</span>
+                </h3>
+
+                <!-- Colors & Color Presets -->
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-2">Foreground Color</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="color" id="fg-color" value="#000000" class="w-10 h-10 rounded-xl cursor-pointer border-0 bg-transparent p-0">
+                                <input type="text" id="fg-color-hex" value="#000000" class="flex-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 text-xs uppercase font-mono">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-2">Background Color</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="color" id="bg-color" value="#ffffff" class="w-10 h-10 rounded-xl cursor-pointer border-0 bg-transparent p-0">
+                                <input type="text" id="bg-color-hex" value="#ffffff" class="flex-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 text-xs uppercase font-mono">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Color Presets -->
+                    <div>
+                        <span class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-2">Quick Presets</span>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="preset-btn w-7 h-7 rounded-full border-2 border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-blue-500" data-fg="#000000" data-bg="#ffffff" style="background: linear-gradient(135deg, #000 50%, #fff 50%)" title="Classic Black & White"></button>
+                            <button class="preset-btn w-7 h-7 rounded-full border-2 border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-blue-500" data-fg="#1e3a8a" data-bg="#eff6ff" style="background: linear-gradient(135deg, #1e3a8a 50%, #eff6ff 50%)" title="Ocean Blue"></button>
+                            <button class="preset-btn w-7 h-7 rounded-full border-2 border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-blue-500" data-fg="#064e3b" data-bg="#ecfdf5" style="background: linear-gradient(135deg, #064e3b 50%, #ecfdf5 50%)" title="Emerald Green"></button>
+                            <button class="preset-btn w-7 h-7 rounded-full border-2 border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-blue-500" data-fg="#581c87" data-bg="#faf5ff" style="background: linear-gradient(135deg, #581c87 50%, #faf5ff 50%)" title="Deep Purple"></button>
+                            <button class="preset-btn w-7 h-7 rounded-full border-2 border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-blue-500" data-fg="#831843" data-bg="#fdf2f8" style="background: linear-gradient(135deg, #831843 50%, #fdf2f8 50%)" title="Berry Pink"></button>
+                            <button class="preset-btn w-7 h-7 rounded-full border-2 border-slate-300 dark:border-slate-600 focus:ring-2 focus:ring-blue-500" data-fg="#ffffff" data-bg="#0f172a" style="background: linear-gradient(135deg, #fff 50%, #0f172a 50%)" title="Inverted Dark"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="h-px bg-slate-200/60 dark:bg-slate-800/60"></div>
+
+                <!-- Size, Margin, & Error Correction -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-medium text-slate-500 dark:text-slate-400">Size (px)</label>
+                            <span id="size-val" class="text-xs font-mono font-semibold text-slate-700 dark:text-slate-300">256</span>
+                        </div>
+                        <input type="range" id="opt-size" min="128" max="512" step="16" value="256" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-medium text-slate-500 dark:text-slate-400">Margin / Quiet Zone</label>
+                            <span id="margin-val" class="text-xs font-mono font-semibold text-slate-700 dark:text-slate-300">2</span>
+                        </div>
+                        <input type="range" id="opt-margin" min="0" max="6" step="1" value="2" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Error Correction Level</label>
+                        <select id="opt-ecl" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <option value="L">L - Low (7% recovery)</option>
+                            <option value="M" selected>M - Medium (15% recovery)</option>
+                            <option value="Q">Q - Quartile (25% recovery)</option>
+                            <option value="H">H - High (30% recovery - Recommended for Logos)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="h-px bg-slate-200/60 dark:bg-slate-800/60"></div>
+
+                <!-- Logo Overlay Settings -->
+                <div class="space-y-3">
+                    <label class="block text-xs font-medium text-slate-500 dark:text-slate-400">Center Logo Overlay (Optional)</label>
+                    <div class="flex flex-col sm:flex-row items-center gap-4">
+                        <label class="w-full sm:w-auto flex items-center justify-center space-x-2 px-4 py-2 rounded-xl border border-dashed border-slate-300 dark:border-slate-600 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer text-xs font-medium text-slate-600 dark:text-slate-300 bg-white/30 dark:bg-slate-900/30 transition-all">
+                            <i class="fa-solid fa-image text-sm"></i>
+                            <span id="logo-file-label">Upload Image Logo</span>
+                            <input type="file" id="logo-input" accept="image/*" class="hidden">
+                        </label>
+                        <button id="btnRemoveLogo" class="hidden text-xs text-rose-500 hover:text-rose-600 font-medium flex items-center space-x-1">
+                            <i class="fa-solid fa-trash"></i>
+                            <span>Remove Logo</span>
+                        </button>
+                    </div>
+
+                    <!-- Logo Size Slider -->
+                    <div id="logo-size-container" class="hidden pt-2">
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-medium text-slate-500 dark:text-slate-400">Logo Size</label>
+                            <span id="logo-size-val" class="text-xs font-mono font-semibold text-slate-700 dark:text-slate-300">20%</span>
+                        </div>
+                        <input type="range" id="opt-logo-size" min="10" max="30" step="2" value="20" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="lg:col-span-5 xl:col-span-4 flex flex-col space-y-6">
+            
+            <!-- Sticky Preview Box -->
+            <div class="glass-panel rounded-2xl p-6 shadow-md border border-slate-200/60 dark:border-slate-800/60 flex flex-col items-center justify-center space-y-6 sticky top-24">
+                
+                <div class="flex justify-between items-center w-full">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Live QR Preview</span>
+                    <!-- Scannability / Contrast Warning Indicator -->
+                    <div id="contrast-badge" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span id="contrast-text">Good Contrast</span>
+                    </div>
+                </div>
+
+                <!-- Canvas Preview Container -->
+                <div id="qr-preview-wrapper" class="relative flex items-center justify-center p-6 bg-slate-900 rounded-2xl shadow-inner border border-slate-800 transition-all w-full max-w-full overflow-hidden">
+                    <!-- Offscreen container for QRCode.js matrix computation -->
+                    <div id="qrcode" class="hidden" aria-hidden="true"></div>
+                    <!-- Single unified canvas for Live Preview & Exporting -->
+                    <canvas id="export-canvas" class="max-w-full h-auto block rounded-lg shadow-2xl mx-auto object-contain transition-all duration-200"></canvas>
+                </div>
+
+                <!-- Action Button Grid -->
+                <div class="w-full grid grid-cols-2 gap-3">
+                    <button id="btnDownloadPNG" class="flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs sm:text-sm shadow-md shadow-blue-500/20 active:scale-95 transition-all">
+                        <i class="fa-solid fa-download"></i>
+                        <span>PNG</span>
+                    </button>
+                    <button id="btnDownloadJPG" class="flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white font-medium text-xs sm:text-sm shadow-md active:scale-95 transition-all">
+                        <i class="fa-solid fa-file-image"></i>
+                        <span>JPG</span>
+                    </button>
+                    <button id="btnDownloadSVG" class="flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium text-xs sm:text-sm active:scale-95 transition-all">
+                        <i class="fa-solid fa-code"></i>
+                        <span>SVG</span>
+                    </button>
+                    <button id="btnCopyImage" class="flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium text-xs sm:text-sm active:scale-95 transition-all">
+                        <i class="fa-solid fa-copy"></i>
+                        <span>Copy Image</span>
+                    </button>
+                </div>
+
+                <!-- Copy Payload Button -->
+                <button id="btnCopyPayload" class="w-full text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors flex items-center justify-center space-x-1.5 py-1">
+                    <i class="fa-solid fa-terminal"></i>
+                    <span>Copy Raw QR Data Payload</span>
+                </button>
+
+            </div>
+
+            <div class="glass-panel rounded-2xl p-5 shadow-sm border border-slate-200/60 dark:border-slate-800/60 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                        <i class="fa-solid fa-history text-indigo-500"></i>
+                        <span>Saved History</span>
+                    </h3>
+                    <button id="btnClearHistory" class="text-xs text-slate-400 hover:text-rose-500 transition-colors">Clear All</button>
+                </div>
+
+                <div id="history-list" class="space-y-2 max-h-56 overflow-y-auto pr-1">
+                    <!-- Dynamic History Items render here -->
+                    <p id="history-empty" class="text-xs text-slate-400 text-center py-4">No saved QR codes yet.</p>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="mt-auto border-t border-slate-200/50 dark:border-slate-800/50 py-4 px-6 text-center text-xs text-slate-400">
+        <p>QR Studio Pro — Dynamic Web QR Code Generator & Designer By Algie Marcaida</p>
+    </footer>
+
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 ease-out flex items-center space-x-3 px-4 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xl border border-slate-700/50">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 dark:text-emerald-600"></i>
+        <span id="toast-message" class="text-sm font-medium">Action completed successfully!</span>
+    </div>
+
+    <script src="./JavaScript/script.js"></script>
+</body>
+</html>

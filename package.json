@@ -1,0 +1,11 @@
+{
+  "name": "qr-code-studio",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tailwindcss -c tailwind.config.cjs -i ./CSS/tailwind-input.css -o ./CSS/tailwind.generated.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  }
+}
